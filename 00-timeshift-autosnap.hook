@@ -1,0 +1,16 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Creating Timeshift snapshot before upgrade...
+Depends = timeshift
+When = PreTransaction
+#Exec = /usr/bin/timeshift-autosnap
+Exec = /usr/bin/bash -c '[ -v "__AUTOSNAP_LOCK" ] && if [ -f "$__AUTOSNAP_LOCK" ]; then export SKIP_AUTOSNAP=":)"; else sudo -u ${SUDO_USER} touch "$__AUTOSNAP_LOCK"; fi; /usr/bin/timeshift-autosnap'
+
+# to debug sudo environment problems:
+#Exec = /usr/bin/bash -c '/usr/bin/printenv; [ -v "__AUTOSNAP_LOCK" ] && if [ -f "$__AUTOSNAP_LOCK" ]; then export SKIP_AUTOSNAP=":)"; else sudo -u ${SUDO_USER} touch "$__AUTOSNAP_LOCK"; fi; /usr/bin/timeshift-autosnap'
+
+AbortOnFail
