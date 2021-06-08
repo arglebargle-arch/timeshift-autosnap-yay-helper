@@ -4,18 +4,11 @@
 #
 # this helper code stops yay + timeshift-autosnap from taking multiple snapshots during the same update
 
-__AUTOSNAP_LOCK="$(mktemp -ut "yay-autosnap.lock-XXXXXXX")"
-export __AUTOSNAP_LOCK
+# shellcheck disable=SC2155
+export __AUTOSNAP_LOCK="$(mktemp -ut "yay-autosnap.lock-XXXXXXX")"
 
-_onexit() {
-	if [[ -f "$1" ]]; then
-    printf "%s: " "$(basename "$0")"
-    rm -fv -- "$1"
-	fi
-}
 # shellcheck disable=SC2064
-trap "_onexit $__AUTOSNAP_LOCK" EXIT
-
-"$(type -P yay)" --sudoflags="--preserve-env=__AUTOSNAP_LOCK" "$@"
+trap "[[ -f $__AUTOSNAP_LOCK ]] && rm -f -- $__AUTOSNAP_LOCK" EXIT
 
 # see hook /etc/pacman.d/hooks/00-timeshift-autosnap.hook for reference
+exec "$(type -P yay)" --sudoflags="--preserve-env=__AUTOSNAP_LOCK" "${@:--Syu}"
