@@ -4,9 +4,9 @@ This code stops your AUR helper and timeshift-autosnap from taking multiple snap
 
 ### How to Install:
 
-Move timeshift-autosnap-wrapper.sh to somewhere in your path (e.g. ~/.local/bin) and call it instead of your AUR helper
-before updating,then move 00-timeshift-autosnap.hook into /etc/pacman.d/hooks/ to override the original autosnap hook. 
-Finally write `export AUR_HELPER=EXAMPLE` into your .profile, replacing EXAMPLE with the one you use (in lowercase).
+First move `autosnap-wrapper.sh` to somewhere in your path (e.g. ~/.local/bin) and call it instead of your AUR helper
+before updating,then move `00-timeshift-autosnap.hook` into `/etc/pacman.d/hooks/` to override the original autosnap hook. 
+Finally write in your `~/.profile`: `export AUR_HELPER=EXAMPLE`, replacing EXAMPLE with the one you use (in lowercase).
 
 ### The Problem:
 
